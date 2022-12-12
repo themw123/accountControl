@@ -1,6 +1,7 @@
 
 from gmail import Gmail
 from person import Person
+from request import Request
 
 
 def choose_gen():
@@ -32,6 +33,7 @@ print("\nWelcome to AccountGen 1.0\n")
 if number == 1:
     gmail = Gmail()
     gmail.create_account() """
+request = Request()
 person = Person()
-gmail = Gmail(person)
+gmail = Gmail(request, person)
 gmail.create_account()
