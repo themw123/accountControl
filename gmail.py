@@ -1,14 +1,15 @@
-import requests
-
 from person import Person
+from request import Request
 
 
 class Gmail:
     # Class attribute
     person: Person
+    request: Request
 
     # Constructor
-    def __init__(self, person):
+    def __init__(self, request, person):
+        self.request = request
         self.person = person
 
     def create_account(self):
@@ -18,15 +19,4 @@ class Gmail:
         print(self.person.user_name)
         print(self.person.password)
         body = ""
-        response = self.make_request(url, body)
-
-    def make_request(self, url, body):
-        response = requests.get(url)
-        if response.status_code != 200:
-            print("\nRequest was invalid: \n"
-                  "status code: " + str(response.status_code) + "\n"
-                  "url: " + url + "\n"
-                  "response: " + response.text + "\n"
-                  )
-            quit()
-        return response
+        response = self.request.make_request(url, body)
