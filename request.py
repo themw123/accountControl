@@ -5,14 +5,14 @@ from random_user_agent.user_agent import UserAgent
 
 class Request:
     # Class attribute
-    user_agent: str
+
     # Constructor
-
     def __init__(self):
-        self.user_agent = self.create_user_agent()
+        pass
 
-    def make_request(self, url, body):
+    def make_request(self, url, headers, body):
         response = requests.get(url)
+        #response = requests.post(url, headers=headers)
         if response.status_code != 200:
             print("\nRequest was invalid: \n"
                   "status code: " + str(response.status_code) + "\n"
