@@ -24,3 +24,10 @@ class Person:
         letter = random.choice(string.ascii_letters)
         number = random.randint(0, 10)
         self.user_name = self.user_name + letter + str(number)
+
+        print("Person: ")
+        print(self.first_name)
+        print(self.last_name)
+        print(self.user_name)
+        print(self.password)
+        print("\n")
