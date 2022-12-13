@@ -1,12 +1,13 @@
-from person import Person
-from request import Request
-from selenium import webdriver
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.by import By
 import random
 import time
 
+from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+
+from person import Person
+from request import Request
 
 
 class Gmail:
@@ -21,7 +22,6 @@ class Gmail:
 
     def create_account(self):
         # with selenium
-        recovery_email = "lol.loli1517@web.de"
         browser = webdriver.Chrome()
         browser.delete_all_cookies()
         browser.get("https://accounts.google.com/SignUp?hl=en")
