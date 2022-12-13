@@ -1,10 +1,10 @@
 import random
 import time
 
+import undetected_chromedriver as uc
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
-from seleniumwire import webdriver
 
 from person import Person
 from request import Request
@@ -20,11 +20,13 @@ class Gmail:
         self.request = request
         self.person = person
 
-    def create_account(self):
+    def create_account_gets_detected(self):
         # with selenium
-        browser = webdriver.Chrome()
+        #browser = webdriver.Chrome()
+        browser = uc.Chrome()
         browser.delete_all_cookies()
-        browser.get("https://accounts.google.com/SignUp?hl=en")
+        browser.get(
+            "https://accounts.google.com/SignUp?hl=en")
 
         #!!!!!!!!!!!!!!!!!!first page!!!!!!!!!!!!!!!!!!
         browser.find_element(By.CSS_SELECTOR, 'input[id="firstName"]').send_keys(
