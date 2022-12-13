@@ -1,3 +1,4 @@
 Faker==15.3.4
 random_user_agent==1.0.1
 requests==2.28.1
+selenium==4.7.2
