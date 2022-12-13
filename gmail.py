@@ -13,14 +13,21 @@ class Gmail:
         self.person = person
 
     def create_account(self):
-        url = "https://accounts.google.com/signup/v2/webcreateaccount?flowName=GlifWebSignIn&flowEntry=SignUp"
+        # with selenium
+        pass
+
+    def create_account_not_working(self):
+        # with request not working
+        url = "https://accounts.google.com/signin/v2/challenge/password/empty"
         headers = {
             'User-Agent': self.request.create_user_agent(),
-            'From': 'youremail@domain.example'
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
-        print(self.person.first_name)
-        print(self.person.last_name)
-        print(self.person.user_name)
-        print(self.person.password)
-        body = ""
+        body = {
+            'firsName': self.person.first_name,
+            'lastName': self.person.last_name,
+            'Username': self.person.user_name,
+            'Passwd': self.person.password,
+            'ConfirmPasswd': self.person.password
+        }
         response = self.request.make_request(url, headers, body)

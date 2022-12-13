@@ -11,15 +11,22 @@ class Request:
         pass
 
     def make_request(self, url, headers, body):
-        response = requests.get(url)
-        #response = requests.post(url, headers=headers)
-        if response.status_code != 200:
+        if body is None:
+            response = requests.get(url, headers=headers)
+        else:
+            response = requests.post(url, headers=headers, data=body)
+
+        if response.status_code != 200 and response.status_code != 204:
             print("\nRequest was invalid: \n"
                   "status code: " + str(response.status_code) + "\n"
                   "url: " + url + "\n"
                   "response: " + response.text + "\n"
                   )
             quit()
+        else:
+            print(
+                "response: " + response.text + "\n"
+            )
         return response
 
     def create_user_agent(self):
