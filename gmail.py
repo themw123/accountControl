@@ -3,7 +3,6 @@ from __future__ import print_function
 
 import json
 import os.path
-import time
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -25,7 +24,7 @@ class Gmail:
         self.person = person
         self.mongodb = mongodb
 
-    def print_inbox(self, user_name):
+    def handle_token():
         SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
         creds = None
         if os.path.exists('token.json'):
@@ -42,6 +41,11 @@ class Gmail:
             # Save the credentials for the next run
             with open('token.json', 'w') as token:
                 token.write(creds.to_json())
+        return creds
+
+    def print_inbox(self, user_name):
+
+        creds = self.handle_token()
 
         try:
             # Call the Gmail API
