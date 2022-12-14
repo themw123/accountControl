@@ -19,11 +19,8 @@ class Mongodb:
         self.collection.insert_one(data)
 
     def find(self, query):
-        """ query = {"name": "John Doe"}
         cursor = self.collection.find(query)
-        for person in cursor:
-            print(person) """
-        pass
+        return cursor
 
     def find_one(self, query):
         """ query = {"name": "John Doe"}
