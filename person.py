@@ -5,6 +5,7 @@ import time
 
 from faker import Faker
 
+from gmail import Gmail
 from mongodb import Mongodb
 
 
@@ -32,7 +33,7 @@ class Person:
         print("\n")
         number_database = ""
         while not number_database or (number_database not in ["y", "n"]):
-            number_database = self.save_person_database()
+            number_database = self.save_person_gmail_database()
 
     def create_names(self):
         self.first_name = self.fake.first_name()
@@ -52,9 +53,7 @@ class Person:
         r = random.randint(0, 1)
         self.gender = genders[r]
 
-    def save_person_database(self):
-        clientid = input("Client ID: ")
-        clientkey = input("Client Key: ")
+    def save_person_gmail_database(self):
         number_database = input("Save to Database? [y/n]: ")
         if number_database == "y":
             data = {
@@ -62,8 +61,6 @@ class Person:
                 "last_name": self.last_name,
                 "user_name": self.user_name + "@gmail.com",
                 "password": self.password,
-                "clientid": clientid,
-                "clientkey": clientkey,
             }
             self.mongodb.set_collection("gmail")
             self.mongodb.insert(data)
@@ -73,17 +70,31 @@ class Person:
             print("not saved.")
         return number_database
 
-    def show_all_database(self):
+    def show_all_gmail_database(self):
         self.mongodb.set_collection("gmail")
         cursor = self.mongodb.find("")
         for person in cursor:
             print(json.dumps(person, default=str, indent=2) + "\n")
         input("\nEnter to continue...")
 
-    def get_all_database(self):
+    def get_all_gmail_database(self):
         self.mongodb.set_collection("gmail")
         cursor = self.mongodb.find("")
         return cursor
+
+    def show_all_latest_inbox_gmail_database(self):
+        self.mongodb.set_collection("gmail")
+        cursor = self.mongodb.find("")
+        # create empty array
+        for person in cursor:
+            gmail = Gmail()
+            gmail.print_inbox(person["user_name"])
+        input("\nEnter to continue...")
+
+    def save_token_gmail_database(self, token):
+        self.mongodb.set_collection("gmail")
+        self.mongodb.update({"user_name": self.user_name},
+                            {"$set": {"token": token}})
 
     def print_person(self):
         print("\n")
