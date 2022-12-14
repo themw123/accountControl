@@ -25,7 +25,6 @@ class Person:
         self.user_name = self.user_name + letter + str(number)
 
     def print_person(self):
-        print("\nPerson: ")
         print(self.first_name)
         print(self.last_name)
         print(self.user_name)
