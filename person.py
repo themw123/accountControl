@@ -32,15 +32,18 @@ class Person:
         print("\n")
         number_database = ""
         while not number_database or (number_database not in ["y", "n"]):
-            number_database = self.save_person_in_database()
+            number_database = self.save_person_database()
 
     def create_names(self):
         self.first_name = self.fake.first_name()
         self.last_name = self.fake.last_name()
         self.user_name = self.fake.user_name()
-        letter = random.choice(string.ascii_letters)
-        number = random.randint(0, 10)
-        self.user_name = self.user_name + letter + str(number)
+        letter1 = random.choice(string.ascii_letters)
+        number1 = random.randint(0, 10)
+        letter2 = random.choice(string.ascii_letters)
+        number2 = random.randint(0, 10)
+        self.user_name = letter1 + str(number1) + \
+            self.user_name + letter2 + str(number2)
 
         self.day = random.randint(1, 28)
         self.month = random.randint(1, 12)
@@ -49,7 +52,9 @@ class Person:
         r = random.randint(0, 1)
         self.gender = genders[r]
 
-    def save_person_in_database(self):
+    def save_person_database(self):
+        clientid = input("Client ID: ")
+        clientkey = input("Client Key: ")
         number_database = input("Save to Database? [y/n]: ")
         if number_database == "y":
             data = {
@@ -57,6 +62,8 @@ class Person:
                 "last_name": self.last_name,
                 "user_name": self.user_name + "@gmail.com",
                 "password": self.password,
+                "clientid": clientid,
+                "clientkey": clientkey,
             }
             self.mongodb.set_collection("gmail")
             self.mongodb.insert(data)
@@ -66,12 +73,17 @@ class Person:
             print("not saved.")
         return number_database
 
-    def show_all(self):
+    def show_all_database(self):
         self.mongodb.set_collection("gmail")
         cursor = self.mongodb.find("")
         for person in cursor:
             print(json.dumps(person, default=str, indent=2) + "\n")
         input("\nEnter to continue...")
+
+    def get_all_database(self):
+        self.mongodb.set_collection("gmail")
+        cursor = self.mongodb.find("")
+        return cursor
 
     def print_person(self):
         print("\n")
