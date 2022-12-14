@@ -1,9 +1,9 @@
 
 from __future__ import print_function
 
-import base64
+import json
 import os.path
-from email.mime.text import MIMEText
+import time
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -11,13 +11,21 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+from mongodb import Mongodb
+from person import Person
+
 
 class Gmail:
     # Class attribute
-
+    person: Person
+    mongodb: Mongodb
     # Constructor
 
-    def print_inbox(self):
+    def __init__(self, person, mongodb):
+        self.person = person
+        self.mongodb = mongodb
+
+    def print_inbox(self, user_name):
         SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
         creds = None
         if os.path.exists('token.json'):
@@ -30,7 +38,7 @@ class Gmail:
                     'credentials.json', SCOPES)
                 creds = flow.run_local_server(port=0)
                 token = input("enter token.json as string: ")
-                self.person.save_token_gmail_database(token)
+                # self.save_token_gmail_database(token)
             # Save the credentials for the next run
             with open('token.json', 'w') as token:
                 token.write(creds.to_json())
@@ -50,3 +58,28 @@ class Gmail:
         except HttpError as error:
             # TODO(developer) - Handle errors from gmail API.
             print(f'An error occurred: {error}')
+
+    def show_all_database(self):
+        self.mongodb.set_collection("gmail")
+        cursor = self.mongodb.find("")
+        for person in cursor:
+            print(json.dumps(person, default=str, indent=2) + "\n")
+        input("\nEnter to continue...")
+
+    def get_all_database(self):
+        self.mongodb.set_collection("gmail")
+        cursor = self.mongodb.find("")
+        return cursor
+
+    def show_all_latest_inbox_database(self):
+        self.mongodb.set_collection("gmail")
+        cursor = self.mongodb.find("")
+        # create empty array
+        for person in cursor:
+            self.print_inbox(person["user_name"])
+        input("\nEnter to continue...")
+
+    def save_token_database(self, token):
+        # self.mongodb.set_collection("gmail")
+        # self.mongodb.update({"user_name": self.user_name},{"$set": {"token": token}})
+        pass
