@@ -1,4 +1,6 @@
+consolemenu==1.0.1
 Faker==15.3.4
+pandas==1.5.2
+pymongo==4.3.3
 random_user_agent==1.0.1
 requests==2.28.1
-selenium==4.7.2
