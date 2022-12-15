@@ -14,17 +14,20 @@ gmail = Gmail(person, mongodb)
 
 menu = ConsoleMenu("Welcome to AccountGen", "Version 1.0")
 function_item1 = FunctionItem("Generate Fake Person", person.gen_fake_person)
-function_item2 = FunctionItem("Show Accounts", gmail.show_all_database)
+function_item2 = FunctionItem("Show accounts", gmail.show_all_database)
 function_item3 = FunctionItem(
-    "Show all latest Inbox", gmail.show_all_latest_inbox_database)
+    "Show all latest inbox", gmail.show_all_latest_inbox_database)
 function_item4 = FunctionItem(
-    "Send Mail with Account", gmail.send_mail_with_account)
+    "Show one latest inbox", gmail.show_one_latest_inbox_database)
+function_item5 = FunctionItem(
+    "Send one mail", gmail.send_one_mail)
 
 
 selection_menu_gmail = SelectionMenu("", "Gmail")
 selection_menu_gmail.append_item(function_item2)
 selection_menu_gmail.append_item(function_item3)
 selection_menu_gmail.append_item(function_item4)
+selection_menu_gmail.append_item(function_item5)
 
 
 submenu_item_gmail = SubmenuItem("Gmail", selection_menu_gmail, menu)
