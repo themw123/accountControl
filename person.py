@@ -33,54 +33,7 @@ class Person:
         self.create_names()
         self.print_person()
         print("\n")
-        self.save_person_database()
-
-    def set_creds(self):
-        SCOPES = ['https://mail.google.com/']
-        flow = InstalledAppFlow.from_client_secrets_file(
-            'credentials.json', SCOPES)
-        creds = flow.run_local_server(port=0)
-        creds = creds.to_json()
-        self.creds = json.loads(creds)
-
-    def update_creds_database(self, user_name, newcreds):
-        query = {"user_name": user_name}
-        update = {"$set": {"creds": newcreds}}
-        self.mongodb.update(query, update)
-        print("\ncreds updatetd\n")
-
-    def save_person_database(self):
-        input("Enter to generate token")
-        self.set_creds()
-        number_database = ""
-        while not number_database or (number_database not in ["y", "n"]):
-            number_database = input("Save to Database? [y/n]: ")
-        if number_database == "y":
-            data = {
-                "first_name": self.first_name,
-                "last_name": self.last_name,
-                "user_name": self.user_name + "@gmail.com",
-                "password": self.password,
-                "creds": self.creds,
-            }
-            self.mongodb.set_collection("gmail")
-            self.mongodb.insert(data)
-            print("saved.")
-            time.sleep(2)
-        elif number_database == "n":
-            print("not saved.")
-        return number_database
-
-    def get_token_from_person_database(self, user_name):
-        self.mongodb.set_collection("gmail")
-        query = {"user_name": user_name}
-        try:
-            result = self.mongodb.find_one(query)
-            creds = result["creds"]
-            return creds
-        except:
-            print("Error: Creds from Email not found")
-            return None
+        self.save_person_gmail_database()
 
     def create_names(self):
         self.first_name = self.fake.first_name()
@@ -111,3 +64,56 @@ class Person:
         print(self.month)
         print(self.year)
         print(self.gender)
+
+    ################gmail##############################
+    def set_creds(self):
+        SCOPES = ['https://mail.google.com/']
+        flow = InstalledAppFlow.from_client_secrets_file(
+            'credentials.json', SCOPES)
+        creds = flow.run_local_server(port=0)
+        creds = creds.to_json()
+        self.creds = json.loads(creds)
+
+    def update_creds_gmail_database(self, user_name, newcreds):
+        query = {"user_name": user_name}
+        update = {"$set": {"creds": newcreds}}
+        self.mongodb.update(query, update)
+        print("\ncreds updatetd\n")
+
+    def save_person_gmail_database(self):
+        input("Enter to generate token")
+        self.set_creds()
+        number_database = ""
+        while not number_database or (number_database not in ["y", "n"]):
+            number_database = input("Save to Database? [y/n]: ")
+        if number_database == "y":
+            data = {
+                "first_name": self.first_name,
+                "last_name": self.last_name,
+                "user_name": self.user_name + "@gmail.com",
+                "password": self.password,
+                "creds": self.creds,
+            }
+            self.mongodb.set_collection("gmail")
+            self.mongodb.insert(data)
+            print("saved.")
+            time.sleep(2)
+        elif number_database == "n":
+            print("not saved.")
+        return number_database
+
+    def get_token_from_person_gmail_database(self, user_name):
+        self.mongodb.set_collection("gmail")
+        query = {"user_name": user_name}
+        try:
+            result = self.mongodb.find_one(query)
+            creds = result["creds"]
+            return creds
+        except:
+            print("Error: Creds from Email not found")
+            return None
+
+    def get_all_gmail_database(self):
+        self.mongodb.set_collection("gmail")
+        cursor = self.mongodb.find("")
+        return cursor

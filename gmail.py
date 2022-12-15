@@ -32,21 +32,21 @@ class Gmail:
             print(json.dumps(person, default=str, indent=2) + "\n")
         input("\nEnter to continue...")
 
-    def show_all_latest_inbox_database(self):
-        self.mongodb.set_collection("gmail")
-        cursor = self.mongodb.find("")
+    def show_all_latest_inbox(self):
+        cursor = self.person.get_all_gmail_database()
         # create empty array
         for person in cursor:
             self.creds = person["creds"]
             self.show_inbox(person["user_name"])
         input("\nEnter to continue...")
 
-    def show_one_latest_inbox_database(self):
+    def show_one_latest_inbox(self):
         user_name = input("Input Email: ")
         print()
 
         try:
-            self.creds = self.person.get_token_from_person_database(user_name)
+            self.creds = self.person.get_token_from_person_gmail_database(
+                user_name)
             if self.creds is not None:
                 self.show_inbox(user_name)
         except:
@@ -54,8 +54,7 @@ class Gmail:
         input("\nEnter to continue...")
 
     def send_all_mail(self):
-        self.mongodb.set_collection("gmail")
-        cursor = self.mongodb.find("")
+        cursor = self.person.get_all_gmail_database()
         # create empty array
 
         toUser = input("to: ")
@@ -64,7 +63,8 @@ class Gmail:
         print()
         for person in cursor:
             fromUser = person["user_name"]
-            self.creds = self.person.get_token_from_person_database(fromUser)
+            self.creds = self.person.get_token_from_person_gmail_database(
+                fromUser)
             self.send_mail(fromUser, toUser, subject, body)
 
         input("\nEnter to continue...")
@@ -76,7 +76,7 @@ class Gmail:
         body = input("body: ")
         print("")
 
-        self.creds = self.person.get_token_from_person_database(fromUser)
+        self.creds = self.person.get_token_from_person_gmail_database(fromUser)
         if self.creds is not None:
             self.send_mail(fromUser, toUser, subject, body)
         input("\nEnter to continue...")
@@ -92,7 +92,7 @@ class Gmail:
                 self.creds.refresh(Request())
                 new_creds = self.creds.to_json()
                 new_credsx = json.loads(new_creds)
-                self.person.update_creds_database(user_name, new_credsx)
+                self.person.update_creds_gmail_database(user_name, new_credsx)
 
     def show_inbox(self, user_name):
         try:
@@ -166,8 +166,3 @@ class Gmail:
         except HttpError as error:
             print(F'An error occurred: {error}')
             send_message = None
-
-    def get_all_database(self):
-        self.mongodb.set_collection("gmail")
-        cursor = self.mongodb.find("")
-        return cursor
