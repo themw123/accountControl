@@ -1,3 +1,4 @@
+import json
 import os.path
 import random
 import string
@@ -18,7 +19,7 @@ class Person:
     user_name: str
     password = "***REMOVED***"
 
-    token: str
+    cred: json
 
     day: int
     month: int
@@ -40,7 +41,14 @@ class Person:
         flow = InstalledAppFlow.from_client_secrets_file(
             'credentials.json', SCOPES)
         creds = flow.run_local_server(port=0)
-        self.token = creds.to_json()
+        creds = creds.to_json()
+        self.creds = json.loads(creds)
+
+    def update_creds_database(self, user_name, newcreds):
+        query = {"user_name": user_name}
+        update = {"$set": {"creds": newcreds}}
+        self.mongodb.update(query, update)
+        print("\ncreds updatetd\n")
 
     def save_person_database(self):
         input("Enter to generate token")
@@ -54,7 +62,7 @@ class Person:
                 "last_name": self.last_name,
                 "user_name": self.user_name + "@gmail.com",
                 "password": self.password,
-                "token": self.token,
+                "creds": self.creds,
             }
             self.mongodb.set_collection("gmail")
             self.mongodb.insert(data)

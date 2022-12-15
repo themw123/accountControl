@@ -19,7 +19,7 @@ class Gmail:
     # Class attribute
     person: Person
     mongodb: Mongodb
-    cred: Credentials
+    creds: Credentials
     # Constructor
 
     def __init__(self, person, mongodb):
@@ -38,7 +38,8 @@ class Gmail:
         cursor = self.mongodb.find("")
         # create empty array
         for person in cursor:
-            self.show_inbox(person["user_name"], person["token"])
+            self.creds = person["creds"]
+            self.show_inbox(person["user_name"])
         input("\nEnter to continue...")
 
     def show_one_latest_inbox_database(self):
@@ -48,7 +49,7 @@ class Gmail:
         try:
             token = self.person.get_token_from_person_database(user_name)
             if token is not None:
-                self.show_inbox(user_name, token)
+                self.show_inbox(user_name)
         except:
             pass
         input("\nEnter to continue...")
@@ -83,23 +84,28 @@ class Gmail:
 
     ###############helper###########################################################
 
-    def set_cred(self, token):
+    def set_cred(self, user_name):
         # create google.oauth2.credentials.Credentials object with token
-        self.creds = Credentials.from_authorized_user_info(json.loads(token))
+        self.creds = Credentials.from_authorized_user_info(self.creds)
         if not self.creds or not self.creds.valid:
             if self.creds and self.creds.expired and self.creds.refresh_token:
                 self.creds.refresh(Request())
+                new_creds = self.creds.to_json()
+                new_credsx = json.loads(new_creds)
 
-                # save new the token to the database
-                """ !!!!!!!!!!!!!!!!!!!
-                !!!!!!!!!!!!!!!!!!!
-                !!!!!!!!!!!!!!!!!!!
-                !!!!!!!!!!!!!!!!!!!
-                !!!!!!!!!!!!!!!!!!! """
+        self.person.update_creds_database(user_name, new_credsx)
+        # update token to database
 
-    def show_inbox(self, user_name, token):
+        # save new the token to the database
+        """ !!!!!!!!!!!!!!!!!!!
+        !!!!!!!!!!!!!!!!!!!
+        !!!!!!!!!!!!!!!!!!!
+        !!!!!!!!!!!!!!!!!!!
+        !!!!!!!!!!!!!!!!!!! """
+
+    def show_inbox(self, user_name):
         try:
-            self.set_cred(token)
+            self.set_cred(user_name)
             # Call the Gmail API
             service = build('gmail', 'v1', credentials=self.creds)
             response = service.users().messages().list(
