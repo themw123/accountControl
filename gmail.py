@@ -53,6 +53,22 @@ class Gmail:
             pass
         input("\nEnter to continue...")
 
+    def send_all_mail(self):
+        self.mongodb.set_collection("gmail")
+        cursor = self.mongodb.find("")
+        # create empty array
+
+        toUser = input("to: ")
+        subject = input("subject: ")
+        body = input("body: ")
+        print()
+        for person in cursor:
+            fromUser = person["user_name"]
+            token = self.person.get_token_from_person_database(fromUser)
+            self.send_mail(token, fromUser, toUser, subject, body)
+
+        input("\nEnter to continue...")
+
     def send_one_mail(self):
         fromUser = input("from: ")
         toUser = input("to: ")

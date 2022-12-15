@@ -20,6 +20,8 @@ function_item3 = FunctionItem(
 function_item4 = FunctionItem(
     "Show one latest inbox", gmail.show_one_latest_inbox_database)
 function_item5 = FunctionItem(
+    "Send all mail", gmail.send_all_mail)
+function_item6 = FunctionItem(
     "Send one mail", gmail.send_one_mail)
 
 
@@ -28,6 +30,7 @@ selection_menu_gmail.append_item(function_item2)
 selection_menu_gmail.append_item(function_item3)
 selection_menu_gmail.append_item(function_item4)
 selection_menu_gmail.append_item(function_item5)
+selection_menu_gmail.append_item(function_item6)
 
 
 submenu_item_gmail = SubmenuItem("Gmail", selection_menu_gmail, menu)
