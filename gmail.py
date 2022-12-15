@@ -104,38 +104,38 @@ class Gmail:
             service = build('gmail', 'v1', credentials=self.creds)
             response = service.users().messages().list(
                 userId="me", labelIds=["INBOX"], maxResults=1).execute()
-            message = response.get("messages")[0]
+            try:
+                message = response.get("messages")[0]
+            except:
+                pass
+
             # Print the subject and body of the email
             message_details = service.users().messages().get(
                 userId="me", id=message["id"]).execute()
             print("Inbox of " + user_name + ":")
+            # Get value of 'payload' from dictionary 'txt'
+            payload = message_details['payload']
+            headers = payload['headers']
+
+            # Look for Subject and Sender Email in the headers
+            for d in headers:
+                if d['name'] == 'Subject':
+                    subject = d['value']
+                if d['name'] == 'From':
+                    sender = d['value']
 
             try:
-                # Get value of 'payload' from dictionary 'txt'
-                payload = message_details['payload']
-                headers = payload['headers']
-
-                # Look for Subject and Sender Email in the headers
-                for d in headers:
-                    if d['name'] == 'Subject':
-                        subject = d['value']
-                    if d['name'] == 'From':
-                        sender = d['value']
-
-                try:
-                    data = payload['body']['data']
-                    body = base64.urlsafe_b64decode(data)
-                    body = str(body)
-                    body = body.replace("b'", "").replace("\\r\\n'", "")
-                except:
-                    body = message_details.get("snippet")
-
-                print("\tSubject: ", subject)
-                print("\tFrom: ", sender)
-                print("\tMessage: ", body)
-                print('\n')
+                data = payload['body']['data']
+                body = base64.urlsafe_b64decode(data)
+                body = str(body)
+                body = body.replace("b'", "").replace("\\r\\n'", "")
             except:
-                pass
+                body = message_details.get("snippet")
+
+            print("\tSubject: ", subject)
+            print("\tFrom: ", sender)
+            print("\tMessage: ", body)
+            print('\n')
 
             print("\n")
         except HttpError as error:
