@@ -26,6 +26,7 @@ function_item6 = FunctionItem(
 
 
 selection_menu_gmail = SelectionMenu("", "Gmail")
+selection_menu_gmail.append_item(function_item1)
 selection_menu_gmail.append_item(function_item2)
 selection_menu_gmail.append_item(function_item3)
 selection_menu_gmail.append_item(function_item4)
@@ -35,7 +36,5 @@ selection_menu_gmail.append_item(function_item6)
 
 submenu_item_gmail = SubmenuItem("Gmail", selection_menu_gmail, menu)
 
-
-menu.append_item(function_item1)
 menu.append_item(submenu_item_gmail)
 menu.show()
