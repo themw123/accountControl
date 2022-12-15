@@ -36,7 +36,7 @@ class Person:
         self.save_person_database()
 
     def set_token(self):
-        SCOPES = ['https://www.googleapis.com/auth/gmail.compose']
+        SCOPES = ['https://mail.google.com/']
         flow = InstalledAppFlow.from_client_secrets_file(
             'credentials.json', SCOPES)
         creds = flow.run_local_server(port=0)
@@ -72,7 +72,6 @@ class Person:
             token = result["token"]
             return token
         except:
-            print("")
             print("Error: Token from Email not found")
             return None
 
