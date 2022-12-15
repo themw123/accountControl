@@ -26,7 +26,15 @@ class Gmail:
         try:
             # create google.oauth2.credentials.Credentials object with token
             creds = Credentials.from_authorized_user_info(json.loads(token))
-
+            if not creds or not creds.valid:
+                if creds and creds.expired and creds.refresh_token:
+                    creds.refresh(Request())
+                    # save new the token to the database
+                    !!!!!!!!!!!!!!!!!!!
+                    !!!!!!!!!!!!!!!!!!!
+                    !!!!!!!!!!!!!!!!!!!
+                    !!!!!!!!!!!!!!!!!!!
+                    !!!!!!!!!!!!!!!!!!!
             # Call the Gmail API
             service = build('gmail', 'v1', credentials=creds)
             response = service.users().messages().list(
@@ -35,11 +43,19 @@ class Gmail:
             # Print the subject and body of the email
             message_details = service.users().messages().get(
                 userId="me", id=message["id"]).execute()
-            # print(self.person["user_name"])
+            print(user_name + ":")
             print("Subject:", message_details["snippet"])
             print("\n")
         except HttpError as error:
             print(f'An error occurred: {error}')
+
+    def show_all_latest_inbox_database(self):
+        self.mongodb.set_collection("gmail")
+        cursor = self.mongodb.find("")
+        # create empty array
+        for person in cursor:
+            self.print_inbox(person["user_name"], person["token"])
+        input("\nEnter to continue...")
 
     def show_all_database(self):
         self.mongodb.set_collection("gmail")
@@ -52,16 +68,3 @@ class Gmail:
         self.mongodb.set_collection("gmail")
         cursor = self.mongodb.find("")
         return cursor
-
-    def show_all_latest_inbox_database(self):
-        self.mongodb.set_collection("gmail")
-        cursor = self.mongodb.find("")
-        # create empty array
-        for person in cursor:
-            self.print_inbox(person["user_name"], person["token"])
-        input("\nEnter to continue...")
-
-    def save_token_database(self, token):
-        # self.mongodb.set_collection("gmail")
-        # self.mongodb.update({"user_name": self.user_name},{"$set": {"token": token}})
-        pass
