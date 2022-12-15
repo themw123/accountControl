@@ -81,7 +81,7 @@ class Person:
         print("\ncreds updatetd\n")
 
     def save_person_gmail_database(self):
-        input("Enter to generate token\n")
+        input("If you have created your Gmail Account press enter to generate Token\n")
         self.set_creds()
         number_database = ""
         while not number_database or (number_database not in ["y", "n"]):
