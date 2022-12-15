@@ -87,21 +87,13 @@ class Gmail:
     def set_cred(self, user_name):
         # create google.oauth2.credentials.Credentials object with token
         self.creds = Credentials.from_authorized_user_info(self.creds)
+        # update creds when token has expired
         if not self.creds or not self.creds.valid:
             if self.creds and self.creds.expired and self.creds.refresh_token:
                 self.creds.refresh(Request())
                 new_creds = self.creds.to_json()
                 new_credsx = json.loads(new_creds)
-
-        self.person.update_creds_database(user_name, new_credsx)
-        # update token to database
-
-        # save new the token to the database
-        """ !!!!!!!!!!!!!!!!!!!
-        !!!!!!!!!!!!!!!!!!!
-        !!!!!!!!!!!!!!!!!!!
-        !!!!!!!!!!!!!!!!!!!
-        !!!!!!!!!!!!!!!!!!! """
+                self.person.update_creds_database(user_name, new_credsx)
 
     def show_inbox(self, user_name):
         try:
