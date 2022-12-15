@@ -23,9 +23,7 @@ class Mongodb:
         return cursor
 
     def find_one(self, query):
-        """ query = {"name": "John Doe"}
-        return person = self.collection.find_one(query) """
-        pass
+        return self.collection.find_one(query)
 
     def update(self, query, update):
         """ query = {"name": "John Doe"}

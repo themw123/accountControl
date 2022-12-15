@@ -36,13 +36,14 @@ class Person:
         self.save_person_database()
 
     def set_token(self):
-        SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+        SCOPES = ['https://www.googleapis.com/auth/gmail.compose']
         flow = InstalledAppFlow.from_client_secrets_file(
             'credentials.json', SCOPES)
         creds = flow.run_local_server(port=0)
         self.token = creds.to_json()
 
     def save_person_database(self):
+        input("Enter to generate token")
         self.set_token()
         number_database = ""
         while not number_database or (number_database not in ["y", "n"]):
@@ -63,6 +64,18 @@ class Person:
             print("not saved.")
         return number_database
 
+    def get_token_from_person_database(self, user_name):
+        self.mongodb.set_collection("gmail")
+        query = {"user_name": user_name}
+        try:
+            result = self.mongodb.find_one(query)
+            token = result["token"]
+            return token
+        except:
+            print("")
+            print("Error: Token from Email not found")
+            return None
+
     def create_names(self):
         self.first_name = self.fake.first_name()
         self.last_name = self.fake.last_name()
@@ -71,8 +84,8 @@ class Person:
         number1 = random.randint(0, 10)
         letter2 = random.choice(string.ascii_letters)
         number2 = random.randint(0, 10)
-        self.user_name = letter1 + str(number1) + \
-            self.user_name + letter2 + str(number2)
+        self.user_name = letter1 + \
+            str(number1) + self.user_name + letter2 + str(number2)
 
         self.day = random.randint(1, 28)
         self.month = random.randint(1, 12)
