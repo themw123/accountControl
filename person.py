@@ -77,10 +77,10 @@ class Person:
         query = {"user_name": user_name}
         try:
             result = self.mongodb.find_one(query)
-            token = result["token"]
-            return token
+            creds = result["creds"]
+            return creds
         except:
-            print("Error: Token from Email not found")
+            print("Error: Creds from Email not found")
             return None
 
     def create_names(self):

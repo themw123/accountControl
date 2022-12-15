@@ -47,8 +47,8 @@ class Gmail:
         print()
 
         try:
-            token = self.person.get_token_from_person_database(user_name)
-            if token is not None:
+            self.creds = self.person.get_token_from_person_database(user_name)
+            if self.creds is not None:
                 self.show_inbox(user_name)
         except:
             pass
@@ -65,8 +65,8 @@ class Gmail:
         print()
         for person in cursor:
             fromUser = person["user_name"]
-            token = self.person.get_token_from_person_database(fromUser)
-            self.send_mail(token, fromUser, toUser, subject, body)
+            self.creds = self.person.get_token_from_person_database(fromUser)
+            self.send_mail(fromUser, toUser, subject, body)
 
         input("\nEnter to continue...")
 
@@ -77,9 +77,9 @@ class Gmail:
         body = input("body: ")
         print("")
 
-        token = self.person.get_token_from_person_database(fromUser)
-        if token is not None:
-            self.send_mail(token, fromUser, toUser, subject, body)
+        self.creds = self.person.get_token_from_person_database(fromUser)
+        if self.creds is not None:
+            self.send_mail(fromUser, toUser, subject, body)
         input("\nEnter to continue...")
 
     ###############helper###########################################################
@@ -139,9 +139,9 @@ class Gmail:
         except HttpError as error:
             print(f'An error occurred: {error}')
 
-    def send_mail(self, token, fromUser, toUser, subject, body):
+    def send_mail(self, fromUser, toUser, subject, body):
         try:
-            self.set_cred(token)
+            self.set_cred(fromUser)
 
             service = build('gmail', 'v1', credentials=self.creds)
             message = EmailMessage()
