@@ -16,9 +16,9 @@ menu = ConsoleMenu("Welcome to AccountGen", "Version 1.0")
 function_item1 = FunctionItem("Generate Fake Person", person.gen_fake_person)
 function_item2 = FunctionItem("Show accounts", gmail.show_all_database)
 function_item3 = FunctionItem(
-    "Show all latest inbox", gmail.show_all_latest_inbox_database)
+    "Show all latest inbox", gmail.show_all_latest_inbox)
 function_item4 = FunctionItem(
-    "Show one latest inbox", gmail.show_one_latest_inbox_database)
+    "Show one latest inbox", gmail.show_one_latest_inbox)
 function_item5 = FunctionItem(
     "Send all mail", gmail.send_all_mail)
 function_item6 = FunctionItem(
