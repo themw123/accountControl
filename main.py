@@ -1,4 +1,5 @@
 
+
 from consolemenu import *
 from consolemenu.items import *
 
@@ -7,7 +8,7 @@ from mongodb import Mongodb
 from person import Person
 
 mongodb = Mongodb()
-person = Person()
+person = Person(mongodb)
 gmail = Gmail(person, mongodb)
 
 
