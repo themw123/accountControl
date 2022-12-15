@@ -26,11 +26,8 @@ class Mongodb:
         return self.collection.find_one(query)
 
     def update(self, query, update):
-        """ query = {"name": "John Doe"}
-        update = {"$set": {"age": 43}}
         result = self.collection.update_one(query, update)
-        print(result.modified_count) """
-        pass
+        # print(result.modified_count)
 
     def delete(self, query):
         """ query = {"name": "John Doe"}
