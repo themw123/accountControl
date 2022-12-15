@@ -1,8 +1,10 @@
+import os.path
 import random
 import string
 import time
 
 from faker import Faker
+from google_auth_oauthlib.flow import InstalledAppFlow
 
 from mongodb import Mongodb
 
@@ -16,21 +18,50 @@ class Person:
     user_name: str
     password = "***REMOVED***"
 
+    token: str
+
     day: int
     month: int
     year: int
     gender: str
 
-    def __init__(self):
+    def __init__(self, mongodb):
         self.fake = Faker()
+        self.mongodb = mongodb
 
     def gen_fake_person(self):
         self.create_names()
         self.print_person()
         print("\n")
+        self.save_person_database()
+
+    def set_token(self):
+        SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+        flow = InstalledAppFlow.from_client_secrets_file(
+            'credentials.json', SCOPES)
+        creds = flow.run_local_server(port=0)
+        self.token = creds.to_json()
+
+    def save_person_database(self):
+        self.set_token()
         number_database = ""
         while not number_database or (number_database not in ["y", "n"]):
-            number_database = self.save_person_database()
+            number_database = input("Save to Database? [y/n]: ")
+        if number_database == "y":
+            data = {
+                "first_name": self.first_name,
+                "last_name": self.last_name,
+                "user_name": self.user_name + "@gmail.com",
+                "password": self.password,
+                "token": self.token,
+            }
+            self.mongodb.set_collection("gmail")
+            self.mongodb.insert(data)
+            print("saved.")
+            time.sleep(2)
+        elif number_database == "n":
+            print("not saved.")
+        return number_database
 
     def create_names(self):
         self.first_name = self.fake.first_name()
@@ -49,23 +80,6 @@ class Person:
         genders = ["male", "female"]
         r = random.randint(0, 1)
         self.gender = genders[r]
-
-    def save_person_database(self):
-        number_database = input("Save to Database? [y/n]: ")
-        if number_database == "y":
-            data = {
-                "first_name": self.first_name,
-                "last_name": self.last_name,
-                "user_name": self.person.user_name + "@gmail.com",
-                "password": self.password,
-            }
-            self.mongodb.set_collection("gmail")
-            self.mongodb.insert(data)
-            print("saved.")
-            time.sleep(2)
-        elif number_database == "n":
-            print("not saved.")
-        return number_database
 
     def print_person(self):
         print("\n")
