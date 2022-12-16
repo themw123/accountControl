@@ -13,13 +13,9 @@ class GmailDatabase():
     person: Person
     cred: json
 
-    def __init__(self, mongodb):
-        self.mongodb = mongodb
-        self.person = Person()
-
-    def gen_fake_person(self):
-        self.person.gen_fake_person()
-        self.save_person_gmail_database()
+    def __init__(self, person):
+        self.mongodb = Mongodb()
+        self.person = person
 
     def save_person_gmail_database(self):
         self.mongodb.set_collection("gmail")
