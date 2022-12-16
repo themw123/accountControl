@@ -4,7 +4,6 @@ from consolemenu import *
 from consolemenu.items import *
 
 from Gmail import Gmail
-from GmailDatabase import GmailDatabase
 
 gmail = Gmail()
 
