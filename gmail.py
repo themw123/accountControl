@@ -10,31 +10,30 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-from mongodb import Mongodb
-from person import Person
+from PersonGmail import PersonGmail
 
 
 class Gmail:
     # Class attribute
-    person: Person
-    mongodb: Mongodb
+    persongmail: PersonGmail
     creds: Credentials
     # Constructor
 
-    def __init__(self, person, mongodb):
-        self.person = person
-        self.mongodb = mongodb
+    def __init__(self, persongmail):
+        self.persongmail = persongmail
 
     def show_all_database(self):
-        self.mongodb.set_collection("gmail")
-        cursor = self.mongodb.find("")
+        cursor = self.persongmail.get_all_gmail_database()
         for person in cursor:
+            token = person["creds"]["token"]
+            person.pop("creds", None)
+            person.pop("_id", None)
+            person["token"] = token
             print(json.dumps(person, default=str, indent=2) + "\n")
         input("\nEnter to continue...")
 
     def show_all_latest_inbox(self):
-        cursor = self.person.get_all_gmail_database()
-        # create empty array
+        cursor = self.persongmail.get_all_gmail_database()
         for person in cursor:
             self.creds = person["creds"]
             self.show_inbox(person["user_name"])
@@ -45,7 +44,7 @@ class Gmail:
         print()
 
         try:
-            self.creds = self.person.get_token_from_person_gmail_database(
+            self.creds = self.persongmail.get_token_from_person_gmail_database(
                 user_name)
             if self.creds is not None:
                 self.show_inbox(user_name)
@@ -54,16 +53,14 @@ class Gmail:
         input("\nEnter to continue...")
 
     def send_all_mail(self):
-        cursor = self.person.get_all_gmail_database()
-        # create empty array
-
+        cursor = self.persongmail.get_all_gmail_database()
         toUser = input("to: ")
         subject = input("subject: ")
         body = input("body: ")
         print()
         for person in cursor:
             fromUser = person["user_name"]
-            self.creds = self.person.get_token_from_person_gmail_database(
+            self.creds = self.persongmail.get_token_from_person_gmail_database(
                 fromUser)
             self.send_mail(fromUser, toUser, subject, body)
 
@@ -76,14 +73,15 @@ class Gmail:
         body = input("body: ")
         print("")
 
-        self.creds = self.person.get_token_from_person_gmail_database(fromUser)
+        self.creds = self.persongmail.get_token_from_person_gmail_database(
+            fromUser)
         if self.creds is not None:
             self.send_mail(fromUser, toUser, subject, body)
         input("\nEnter to continue...")
 
     ###############helper###########################################################
 
-    def set_cred(self, user_name):
+    def set_creds(self, user_name):
         # create google.oauth2.credentials.Credentials object with token
         self.creds = Credentials.from_authorized_user_info(self.creds)
         # update creds when token has expired
@@ -92,11 +90,12 @@ class Gmail:
                 self.creds.refresh(Request())
                 new_creds = self.creds.to_json()
                 new_credsx = json.loads(new_creds)
-                self.person.update_creds_gmail_database(user_name, new_credsx)
+                self.persongmail.update_creds_gmail_database(
+                    user_name, new_credsx)
 
     def show_inbox(self, user_name):
         try:
-            self.set_cred(user_name)
+            self.set_creds(user_name)
             # Call the Gmail API
             service = build('gmail', 'v1', credentials=self.creds)
             response = service.users().messages().list(
@@ -109,7 +108,7 @@ class Gmail:
             # Print the subject and body of the email
             message_details = service.users().messages().get(
                 userId="me", id=message["id"]).execute()
-            print("Inbox of " + user_name + ":")
+            print(user_name + ":")
             # Get value of 'payload' from dictionary 'txt'
             payload = message_details['payload']
             headers = payload['headers']
@@ -133,14 +132,12 @@ class Gmail:
             print("\tFrom: ", sender)
             print("\tMessage: ", body)
             print('\n')
-
-            print("\n")
         except HttpError as error:
             print(f'An error occurred: {error}')
 
     def send_mail(self, fromUser, toUser, subject, body):
         try:
-            self.set_cred(fromUser)
+            self.set_creds(fromUser)
 
             service = build('gmail', 'v1', credentials=self.creds)
             message = EmailMessage()
