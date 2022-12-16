@@ -3,17 +3,18 @@
 from consolemenu import *
 from consolemenu.items import *
 
-from gmail import Gmail
-from mongodb import Mongodb
-from person import Person
+from Gmail import Gmail
+from Mongodb import Mongodb
+from PersonGmail import PersonGmail
 
 mongodb = Mongodb()
-person = Person(mongodb)
-gmail = Gmail(person, mongodb)
+persongmail = PersonGmail(mongodb)
+gmail = Gmail(persongmail)
 
 
 menu = ConsoleMenu("Welcome to AccountGen", "Version 1.0")
-function_item1 = FunctionItem("Generate Fake Person", person.gen_fake_person)
+function_item1 = FunctionItem(
+    "Generate Fake Person", persongmail.gen_fake_person)
 function_item2 = FunctionItem("Show accounts", gmail.show_all_database)
 function_item3 = FunctionItem(
     "Show all latest inbox", gmail.show_all_latest_inbox)
