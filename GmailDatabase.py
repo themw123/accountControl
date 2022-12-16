@@ -7,7 +7,7 @@ from Mongodb import Mongodb
 from Person import Person
 
 
-class PersonGmail(Person):
+class GmailDatabase(Person):
 
     mongodb: Mongodb
     cred: json

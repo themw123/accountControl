@@ -10,20 +10,20 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-from PersonGmail import PersonGmail
+from GmailDatabase import GmailDatabase
 
 
 class Gmail:
     # Class attribute
-    persongmail: PersonGmail
+    gmaildatabase: GmailDatabase
     creds: Credentials
     # Constructor
 
-    def __init__(self, persongmail):
-        self.persongmail = persongmail
+    def __init__(self, gmaildatabase):
+        self.gmaildatabase = gmaildatabase
 
     def show_all_database(self):
-        cursor = self.persongmail.get_all_gmail_database()
+        cursor = self.gmaildatabase.get_all_gmail_database()
         for person in cursor:
             token = person["creds"]["token"]
             person.pop("creds", None)
@@ -33,7 +33,7 @@ class Gmail:
         input("\nEnter to continue...")
 
     def show_all_latest_inbox(self):
-        cursor = self.persongmail.get_all_gmail_database()
+        cursor = self.gmaildatabase.get_all_gmail_database()
         for person in cursor:
             self.creds = person["creds"]
             self.show_inbox(person["user_name"])
@@ -44,7 +44,7 @@ class Gmail:
         print()
 
         try:
-            self.creds = self.persongmail.get_token_from_person_gmail_database(
+            self.creds = self.gmaildatabase.get_token_from_person_gmail_database(
                 user_name)
             if self.creds is not None:
                 self.show_inbox(user_name)
@@ -53,14 +53,14 @@ class Gmail:
         input("\nEnter to continue...")
 
     def send_all_mail(self):
-        cursor = self.persongmail.get_all_gmail_database()
+        cursor = self.gmaildatabase.get_all_gmail_database()
         toUser = input("to: ")
         subject = input("subject: ")
         body = input("body: ")
         print()
         for person in cursor:
             fromUser = person["user_name"]
-            self.creds = self.persongmail.get_token_from_person_gmail_database(
+            self.creds = self.gmaildatabase.get_token_from_person_gmail_database(
                 fromUser)
             self.send_mail(fromUser, toUser, subject, body)
 
@@ -73,7 +73,7 @@ class Gmail:
         body = input("body: ")
         print("")
 
-        self.creds = self.persongmail.get_token_from_person_gmail_database(
+        self.creds = self.gmaildatabase.get_token_from_person_gmail_database(
             fromUser)
         if self.creds is not None:
             self.send_mail(fromUser, toUser, subject, body)
@@ -90,7 +90,7 @@ class Gmail:
                 self.creds.refresh(Request())
                 new_creds = self.creds.to_json()
                 new_credsx = json.loads(new_creds)
-                self.persongmail.update_creds_gmail_database(
+                self.gmaildatabase.update_creds_gmail_database(
                     user_name, new_credsx)
 
     def show_inbox(self, user_name):
