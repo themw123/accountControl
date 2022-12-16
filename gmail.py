@@ -11,16 +11,23 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from GmailDatabase import GmailDatabase
+from Person import Person
 
 
 class Gmail:
     # Class attribute
+    person: Person
     gmaildatabase: GmailDatabase
     creds: Credentials
     # Constructor
 
-    def __init__(self, gmaildatabase):
-        self.gmaildatabase = gmaildatabase
+    def __init__(self):
+        self.person = Person()
+        self.gmaildatabase = GmailDatabase(self.person)
+
+    def gen_fake_person(self):
+        self.person.gen_fake_person()
+        self.gmaildatabase.save_person_gmail_database()
 
     def show_all_database(self):
         cursor = self.gmaildatabase.get_all_gmail_database()
