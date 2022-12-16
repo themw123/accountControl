@@ -7,17 +7,18 @@ from Mongodb import Mongodb
 from Person import Person
 
 
-class GmailDatabase(Person):
+class GmailDatabase():
 
     mongodb: Mongodb
+    person: Person
     cred: json
 
     def __init__(self, mongodb):
-        super().__init__()
         self.mongodb = mongodb
+        self.person = Person()
 
     def gen_fake_person(self):
-        super().gen_fake_person()
+        self.person.gen_fake_person()
         self.save_person_gmail_database()
 
     def save_person_gmail_database(self):
@@ -30,10 +31,10 @@ class GmailDatabase(Person):
             number_database = input("\nSave to Database? [y/n]: \n")
         if number_database == "y":
             data = {
-                "first_name": self.first_name,
-                "last_name": self.last_name,
-                "user_name": self.user_name + "@gmail.com",
-                "password": self.password,
+                "first_name": self.person.first_name,
+                "last_name": self.person.last_name,
+                "user_name": self.person.user_name + "@gmail.com",
+                "password": self.person.password,
                 "creds": self.creds,
             }
             self.mongodb.insert(data)
