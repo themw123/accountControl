@@ -3,7 +3,7 @@
 from consolemenu import *
 from consolemenu.items import *
 
-from Gmail import Gmail
+from Gmail.Gmail import Gmail
 
 gmail = Gmail()
 

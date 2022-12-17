@@ -1,8 +1,8 @@
 import time
 
-from GmailSession import GmailSession
-from Mongodb import Mongodb
-from Person import Person
+from Gmail.GmailSession import GmailSession
+from Helper.Mongodb import Mongodb
+from Helper.Person import Person
 
 
 class GmailDatabase():
