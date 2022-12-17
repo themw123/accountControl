@@ -8,10 +8,10 @@ from email.message import EmailMessage
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-from GmailDatabase import GmailDatabase
-from GmailSession import GmailSession
-from Mongodb import Mongodb
-from Person import Person
+from Gmail.GmailDatabase import GmailDatabase
+from Gmail.GmailSession import GmailSession
+from Helper.Mongodb import Mongodb
+from Helper.Person import Person
 
 
 class Gmail:
