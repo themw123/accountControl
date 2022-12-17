@@ -10,7 +10,7 @@ class Person:
     first_name: str
     last_name: str
     user_name: str
-    password = "***REMOVED***"
+    password: str
 
     day: int
     month: int
@@ -34,6 +34,7 @@ class Person:
         number2 = random.randint(0, 10)
         self.user_name = letter1 + \
             str(number1) + self.user_name + letter2 + str(number2)
+        self.password = self.generate_password()
 
         self.day = random.randint(1, 28)
         self.month = random.randint(1, 12)
@@ -41,6 +42,11 @@ class Person:
         genders = ["male", "female"]
         r = random.randint(0, 1)
         self.gender = genders[r]
+
+    def generate_password(self):
+        chars = string.ascii_letters + string.digits + string.punctuation
+        password = ''.join(random.choice(chars) for i in range(10))
+        return password
 
     def print_person(self):
         print("\n")
