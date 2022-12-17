@@ -35,7 +35,6 @@ class GmailDatabase():
         }
         self.mongodb.insert(data)
         input("\nSaved account to database. Press enter to go back.")
-        time.sleep(2)
 
     def get_all_gmail_database(self):
         self.mongodb.set_collection("gmail")
