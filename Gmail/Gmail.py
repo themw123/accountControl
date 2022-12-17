@@ -41,6 +41,7 @@ class Gmail:
             person.pop("_id", None)
             person["token"] = token
             print(json.dumps(person, default=str, indent=2) + "\n")
+        print("\n Insgesammt: " + str(cursor.retrieved) + "\n")
         input("\nEnter to continue...")
 
     def show_all_latest_inbox(self):
