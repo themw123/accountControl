@@ -5,25 +5,29 @@ import base64
 import json
 from email.message import EmailMessage
 
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from GmailDatabase import GmailDatabase
+from GmailSession import GmailSession
+from Mongodb import Mongodb
 from Person import Person
 
 
 class Gmail:
     # Class attribute
     person: Person
+    mongodb: Mongodb
     gmaildatabase: GmailDatabase
-    creds: Credentials
+    gmailsession: GmailSession
     # Constructor
 
     def __init__(self):
         self.person = Person()
-        self.gmaildatabase = GmailDatabase(self.person)
+        self.mongodb = Mongodb()
+        self.gmailsession = GmailSession(self.mongodb)
+        self.gmaildatabase = GmailDatabase(
+            self.mongodb, self.person, self.gmailsession)
 
     def gen_fake_person(self):
         self.person.gen_fake_person()
@@ -42,7 +46,7 @@ class Gmail:
     def show_all_latest_inbox(self):
         cursor = self.gmaildatabase.get_all_gmail_database()
         for person in cursor:
-            self.creds = person["creds"]
+            self.gmailsession.set_creds(person["creds"], person["user_name"])
             self.show_inbox(person["user_name"])
         input("\nEnter to continue...")
 
@@ -50,13 +54,12 @@ class Gmail:
         user_name = input("Input Email: ")
         print()
 
-        try:
-            self.creds = self.gmaildatabase.get_token_from_person_gmail_database(
-                user_name)
-            if self.creds is not None:
+        cursor = self.gmaildatabase.get_all_gmail_database()
+        for person in cursor:
+            if person["user_name"] == user_name:
+                self.gmailsession.set_creds(
+                    person["creds"], person["user_name"])
                 self.show_inbox(user_name)
-        except:
-            pass
         input("\nEnter to continue...")
 
     def send_all_mail(self):
@@ -66,10 +69,8 @@ class Gmail:
         body = input("body: ")
         print()
         for person in cursor:
-            fromUser = person["user_name"]
-            self.creds = self.gmaildatabase.get_token_from_person_gmail_database(
-                fromUser)
-            self.send_mail(fromUser, toUser, subject, body)
+            self.gmailsession.set_creds(person["creds"], person["user_name"])
+            self.send_mail(person["user_name"], toUser, subject, body)
 
         input("\nEnter to continue...")
 
@@ -80,31 +81,20 @@ class Gmail:
         body = input("body: ")
         print("")
 
-        self.creds = self.gmaildatabase.get_token_from_person_gmail_database(
-            fromUser)
-        if self.creds is not None:
-            self.send_mail(fromUser, toUser, subject, body)
+        cursor = self.gmaildatabase.get_all_gmail_database()
+        for person in cursor:
+            if person["user_name"] == fromUser:
+                self.gmailsession.set_creds(
+                    person["creds"], person["user_name"])
+                self.send_mail(fromUser, toUser, subject, body)
         input("\nEnter to continue...")
 
     ###############helper###########################################################
 
-    def set_creds(self, user_name):
-        # create google.oauth2.credentials.Credentials object with token
-        self.creds = Credentials.from_authorized_user_info(self.creds)
-        # update creds when token has expired
-        if not self.creds or not self.creds.valid:
-            if self.creds and self.creds.expired and self.creds.refresh_token:
-                self.creds.refresh(Request())
-                new_creds = self.creds.to_json()
-                new_credsx = json.loads(new_creds)
-                self.gmaildatabase.update_creds_gmail_database(
-                    user_name, new_credsx)
-
     def show_inbox(self, user_name):
         try:
-            self.set_creds(user_name)
             # Call the Gmail API
-            service = build('gmail', 'v1', credentials=self.creds)
+            service = build('gmail', 'v1', credentials=self.gmailsession.creds)
             response = service.users().messages().list(
                 userId="me", labelIds=["INBOX"], maxResults=1).execute()
             try:
@@ -144,9 +134,7 @@ class Gmail:
 
     def send_mail(self, fromUser, toUser, subject, body):
         try:
-            self.set_creds(fromUser)
-
-            service = build('gmail', 'v1', credentials=self.creds)
+            service = build('gmail', 'v1', credentials=self.gmailsession.creds)
             message = EmailMessage()
 
             message.set_content(body)
