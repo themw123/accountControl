@@ -40,5 +40,3 @@ class GmailDatabase():
         self.mongodb.set_collection("gmail")
         cursor = self.mongodb.find("")
         return cursor
-
-    ###########helper#################
