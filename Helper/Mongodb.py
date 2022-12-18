@@ -8,7 +8,7 @@ class Mongodb:
     def __init__(self):
         try:
             self.client = pymongo.MongoClient(
-                "mongodb+srv://marv:" + config.password + "@cluster0.4ejve.mongodb.net/?retryWrites=true&w=majority")
+                "mongodb+srv://" + config.username + ":" + config.password + "@cluster0.4ejve.mongodb.net/?retryWrites=true&w=majority")
             self.db = self.client["account"]
         except:
             print("!!!connection to database failed!!!")
