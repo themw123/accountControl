@@ -9,7 +9,6 @@ gmail = Gmail()
 
 menu = ConsoleMenu("Welcome to AccountControl", "Version 1.0")
 function_item1 = FunctionItem(
-
     "Generate Fake Person", gmail.gen_fake_person)
 function_item2 = FunctionItem("Show accounts", gmail.show_all_database)
 function_item3 = FunctionItem(
