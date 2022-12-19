@@ -20,11 +20,12 @@ class GmailDatabase():
         self.mongodb.set_collection("gmail")
         print("If you have created your Gmail Account, please add this accound to your Google Console Project(The one from credentials.json)\n")
 
-        choose1 = ""
-        while not choose1 or (choose1 not in ["y", "n"]):
-            choose1 = input("enter [y] to generate creds and [n] for cancel\n")
-        if choose1 == "n":
-            return
+        choose = ""
+        while not choose or (choose not in ["y", "n"]):
+            choose = input(
+                "\nenter [y] to generate creds and [n] for cancel\n")
+        if choose == "n":
+            return choose
         self.gmailsession.create_creds()
         data = {
             "first_name": self.person.first_name,
@@ -34,7 +35,8 @@ class GmailDatabase():
             "creds": self.gmailsession.creds,
         }
         self.mongodb.insert(data)
-        input("\nSaved account to database. Press enter to go back.")
+        print("Saved to database!\n")
+        return choose
 
     def get_all_gmail_database(self):
         self.mongodb.set_collection("gmail")
