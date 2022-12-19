@@ -31,16 +31,9 @@ class Gmail:
 
     def gen_fake_person(self):
         self.person.gen_fake_person()
-        choose = self.gmaildatabase.save_person_gmail_database()
-        if choose == "n":
-            return
-        choose = ""
-        while not choose or (choose not in ["y", "n"]):
-            choose = input(
-                "\nenter [y] to send mail for clipboard and [n] for not\n")
-        if choose == "y":
-            self.send_mail_for_clipboard_handy()
-            input("Enter to continue...")
+        self.send_mail_for_clipboard_handy()
+        self.gmaildatabase.save_person_gmail_database()
+        input("\nEnter to continue...")
 
     def show_all_database(self):
         cursor = self.gmaildatabase.get_all_gmail_database()
@@ -170,6 +163,13 @@ class Gmail:
             send_message = None
 
     def send_mail_for_clipboard_handy(self):
+        choose = ""
+        while not choose or (choose not in ["y", "n"]):
+            choose = input(
+                "\nenter [y] to send mail for clipboard and [n] for not\n")
+        if choose == "n":
+            return
+
         fromUser = "***REMOVED***"
         toUser = "***REMOVED***"
         subject = "Account Credentials"
