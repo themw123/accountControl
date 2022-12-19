@@ -31,7 +31,16 @@ class Gmail:
 
     def gen_fake_person(self):
         self.person.gen_fake_person()
-        self.gmaildatabase.save_person_gmail_database()
+        choose = self.gmaildatabase.save_person_gmail_database()
+        if choose == "n":
+            return
+        choose = ""
+        while not choose or (choose not in ["y", "n"]):
+            choose = input(
+                "\nenter [y] to send mail for clipboard and [n] for not\n")
+        if choose == "y":
+            self.send_mail_for_clipboard_handy()
+            input("Enter to continue...")
 
     def show_all_database(self):
         cursor = self.gmaildatabase.get_all_gmail_database()
@@ -159,3 +168,18 @@ class Gmail:
         except HttpError as error:
             print(F'An error occurred: {error}')
             send_message = None
+
+    def send_mail_for_clipboard_handy(self):
+        fromUser = "***REMOVED***"
+        toUser = "***REMOVED***"
+        subject = "Account Credentials"
+        body = self.person.first_name + "\n " + self.person.last_name + "\n " + self.person.user_name + "\n " + self.person.password + \
+            "\n\n " + str(self.person.day) + "\n " + str(self.person.month) + \
+            "\n " + str(self.person.year) + "\n " + self.person.gender
+
+        cursor = self.gmaildatabase.get_all_gmail_database()
+        for person in cursor:
+            if person["user_name"] == fromUser:
+                self.gmailsession.set_creds(
+                    person["creds"], person["user_name"])
+                self.send_mail(fromUser, toUser, subject, body)
