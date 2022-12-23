@@ -92,6 +92,19 @@ class Gmail:
                 self.send_mail(fromUser, toUser, subject, body)
         input("\nEnter to continue...")
 
+    def reset_credentials_all(self):
+        cursor = self.gmaildatabase.get_all_gmail_database()
+        counter = 1
+        for person in cursor:
+            if counter > 19:
+                print(person["user_name"])
+                print(person["password"])
+                self.gmailsession.create_creds()
+                self.gmaildatabase.update_person_gmail_database(person)
+            counter += 1
+
+        input("\nEnter to continue...")
+
     ###############helper###########################################################
 
     def show_inbox(self, user_name):
