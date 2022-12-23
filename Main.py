@@ -19,6 +19,8 @@ function_item5 = FunctionItem(
     "Send all mail", gmail.send_all_mail)
 function_item6 = FunctionItem(
     "Send one mail", gmail.send_one_mail)
+function_item7 = FunctionItem(
+    "Reset all credentials", gmail.reset_credentials_all)
 
 
 selection_menu_gmail = SelectionMenu("", "Gmail")
@@ -28,6 +30,7 @@ selection_menu_gmail.append_item(function_item3)
 selection_menu_gmail.append_item(function_item4)
 selection_menu_gmail.append_item(function_item5)
 selection_menu_gmail.append_item(function_item6)
+selection_menu_gmail.append_item(function_item7)
 
 
 submenu_item_gmail = SubmenuItem("Gmail", selection_menu_gmail, menu)

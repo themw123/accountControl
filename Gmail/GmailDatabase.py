@@ -38,6 +38,16 @@ class GmailDatabase():
         print("Saved to database!\n")
         return choose
 
+    def update_person_gmail_database(self, person):
+        self.mongodb.set_collection("gmail")
+        query = {
+            "user_name": person['user_name'],
+        }
+        update = {"$set": {"creds": self.gmailsession.creds}}
+
+        self.mongodb.update(query, update)
+        print("updated!\n")
+
     def get_all_gmail_database(self):
         self.mongodb.set_collection("gmail")
         cursor = self.mongodb.find("")
