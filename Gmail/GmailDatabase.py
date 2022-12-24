@@ -18,7 +18,7 @@ class GmailDatabase():
 
     def save_person_gmail_database(self):
         self.mongodb.set_collection("gmail")
-        print("\nIf you have created your Gmail Account, please add this accound to your Google Console Project(The one from credentials.json)\n")
+        #print("\nIf you have created your Gmail Account, please add this accound to your Google Console Project(The one from credentials.json)\n")
 
         choose = ""
         while not choose or (choose not in ["y", "n"]):
