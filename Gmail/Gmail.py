@@ -29,8 +29,8 @@ class Gmail:
         self.gmaildatabase = GmailDatabase(
             self.mongodb, self.person, self.gmailsession)
 
-    def gen_fake_person(self):
-        self.person.gen_fake_person()
+    def gen_new_person(self):
+        self.person.gen_new_person()
         self.send_mail_for_clipboard_handy()
         self.gmaildatabase.save_person_gmail_database()
         input("\nEnter to continue...")

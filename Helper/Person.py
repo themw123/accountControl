@@ -20,7 +20,7 @@ class Person:
     def __init__(self):
         self.fake = Faker()
 
-    def gen_fake_person(self):
+    def gen_new_person(self):
         self.create_names()
         self.print_person()
 
