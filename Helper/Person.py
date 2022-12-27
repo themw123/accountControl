@@ -45,6 +45,7 @@ class Person:
 
     def generate_password(self):
         chars = string.ascii_letters + string.digits + string.punctuation
+        chars = chars.replace('/', '').replace('\\', '').replace('^', '')
         password = ''.join(random.choice(chars) for i in range(10))
         return password
 
