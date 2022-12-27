@@ -4,10 +4,8 @@ from consolemenu import *
 from consolemenu.items import *
 
 from Gmail.Gmail import Gmail
-from Proton.Proton import Proton
 
 gmail = Gmail()
-proton = Proton()
 
 menu = ConsoleMenu("Welcome to AccountControl", "Version 1.0")
 function_item1 = FunctionItem(
@@ -36,21 +34,6 @@ selection_menu_gmail.append_item(function_item7)
 
 submenu_item_gmail = SubmenuItem("Gmail", selection_menu_gmail, menu)
 
-
-function_item8 = FunctionItem(
-    "Generate new Account", proton.gen_new_account)
-function_item9 = FunctionItem(
-    "Show accounts", proton.show_all_database)
-function_item10 = FunctionItem(
-    "Show one latest inbox", proton.show_one_latest_inbox)
-selection_menu_proton = SelectionMenu("", "Proton")
-selection_menu_proton.append_item(function_item8)
-selection_menu_proton.append_item(function_item9)
-selection_menu_proton.append_item(function_item10)
-
-submenu_item_proton = SubmenuItem("Proton", selection_menu_proton, menu)
-
 menu.append_item(submenu_item_gmail)
-menu.append_item(submenu_item_proton)
 
 menu.show()
