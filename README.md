@@ -1,7 +1,41 @@
-create a google project and download your credentials.json<br />
-place the credentials.json in root of project<br />
-new accounts will be added to the google project<br />
-also new accounts are added and stored to the database(cloud mongodb) for later use like sending mails<br />
-for the database create a config.py file and add the following<br />
-username = "user"<br />
-password = "12345"
+# accountControl
+
+
+Dies ist eine kleine Konsolenanwendung und dient nur zu Lern- und Testzwecken. 
+
+Erstelle ein google Projekt und downloade deine credentials.json.
+
+Platziere credential.json in das Root Verzeichnis.
+
+Neue Accounts werden dem google Projekt hinzugefügt.
+
+Außerdem werden neue Accounts in einer MongoDB (cloud Atlas) Datenbank gespeichert, damit später emails mittels dieses Programms versendet werden können, oder die Postfächer ausgelesen werden können. Platziere config.py ins Root und füge folgendes hinzu:
+
+```
+username = "yourusername"
+password = "yourpassword"
+```
+
+
+Menu:
+![Alt text](/img/home.png)
+
+
+Options:
+![Alt text](/img/gmail.png)
+
+
+Generate new Person:
+![Alt text](/img/generate_new_person.png)
+
+
+Show Accounts:
+![Alt text](/img/generate_new_person.png)
+
+
+Show all latest inbox:
+![Alt text](/img/show_all_latest_inbox)
+
+
+
+
