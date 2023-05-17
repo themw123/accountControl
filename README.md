@@ -25,8 +25,10 @@ Options:
 ![Alt text](/img/gmail.png)
 
 
+
 Generate new Person:
 ![Alt text](/img/generate_new_person.png)
+
 
 
 Show Accounts:
@@ -34,7 +36,7 @@ Show Accounts:
 
 
 Show all latest inbox:
-![Alt text](/img/show_all_latest_inbox)
+![Alt text](/img/show_all_latest_inbox.png)
 
 
 
