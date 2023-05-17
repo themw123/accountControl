@@ -32,7 +32,7 @@ Generate new Person:
 
 
 Show Accounts:
-![Alt text](/img/generate_new_person.png)
+![Alt text](/img/show_accounts.png)
 
 
 Show all latest inbox:
