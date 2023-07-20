@@ -183,8 +183,8 @@ class Gmail:
         if choose == "n":
             return
 
-        fromUser = "xxx"
-        toUser = "xxx"
+        fromUser = "themwudo123@gmail.com"
+        toUser = "marvin.w6@web.de"
         subject = "Account Credentials"
         body = self.person.first_name + "\n " + self.person.last_name + "\n " + self.person.user_name + "\n " + self.person.password + \
             "\n\n " + str(self.person.day) + "\n " + str(self.person.month) + \
